@@ -108,7 +108,7 @@
     align-items: center;
     gap: 8px;
     padding: 14px 32px;
-    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
     color: white;
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
@@ -128,7 +128,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
     opacity: 0;
     transition: opacity 0.3s ease;
   }
@@ -195,7 +195,7 @@
 
   /* ── Gradient Text ── */
   .gradient-text {
-    background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -226,12 +226,12 @@
     align-items: center;
     gap: 6px;
     padding: 6px 14px;
-    background: rgba(139, 92, 246, 0.15);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
     border-radius: 50px;
     font-size: 0.78rem;
     font-weight: 600;
-    color: #a78bfa;
+    color: var(--color-primary-light);
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
@@ -240,7 +240,7 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #8b5cf6;
+    background: var(--color-primary);
     animation: pulse-dot 2s ease-in-out infinite;
   }
 
