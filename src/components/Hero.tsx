@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Play, Star, Zap, Users, Ticket } from 'lucide-react';
-import { fetchFeaturedEvents, fetchSettings } from '../services/api';
+import { fetchFeaturedEvents, fetchSettings, getSettingsCache } from '../services/api';
 import { useCart } from '../contexts/CartContext';
 import type { Event } from '../types';
 
@@ -75,7 +75,7 @@ function Particles() {
 
 export default function Hero() {
   const [heroEvent, setHeroEvent] = useState<Event | null>(null);
-  const [settings, setSettings] = useState<Record<string, string>>({});
+  const [settings, setSettings] = useState<Record<string, string>>(getSettingsCache() || {});
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { addItem } = useCart();
 
@@ -265,23 +265,25 @@ export default function Hero() {
                       </div>
                     </>
                   )}
-                  {/* Live badge */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '16px',
-                    right: '16px',
-                    background: '#ec4899',
-                    color: 'white',
-                    fontSize: '0.7rem',
-                    fontWeight: 700,
-                    padding: '4px 10px',
-                    borderRadius: '50px',
-                    letterSpacing: '0.05em',
-                    textTransform: 'uppercase',
-                    boxShadow: '0 0 12px rgba(236,72,153,0.6)',
-                  }}>
-                    ● AO VIVO
-                  </div>
+                  {/* Esgotado badge */}
+                  {(heroEvent.status === 'sold_out' || heroEvent.quantity - heroEvent.sold <= 0) && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '16px',
+                      right: '16px',
+                      background: '#475569',
+                      color: 'white',
+                      fontSize: '0.7rem',
+                      fontWeight: 700,
+                      padding: '4px 10px',
+                      borderRadius: '50px',
+                      letterSpacing: '0.05em',
+                      textTransform: 'uppercase',
+                      boxShadow: '0 0 12px rgba(71,85,105,0.6)',
+                    }}>
+                      ESGOTADO
+                    </div>
+                  )}
                 </div>
 
                 <div style={{ padding: '20px' }}>
@@ -319,17 +321,28 @@ export default function Hero() {
                     <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#a78bfa' }}>
                       R$ {Number(heroEvent.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </div>
-                    <button 
-                      className="btn-primary" 
-                      style={{ padding: '8px 24px' }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        addItem(heroEvent);
-                      }}
-                    >
-                      <Ticket size={16} />
-                      <span>Comprar</span>
-                    </button>
+                    
+                    {(heroEvent.status === 'sold_out' || heroEvent.quantity - heroEvent.sold <= 0) ? (
+                      <button 
+                        className="btn-primary" 
+                        style={{ padding: '8px 24px', background: '#334155', cursor: 'not-allowed', color: 'rgba(255,255,255,0.5)', opacity: 0.8 }}
+                        disabled
+                      >
+                        <span>Esgotado</span>
+                      </button>
+                    ) : (
+                      <button 
+                        className="btn-primary" 
+                        style={{ padding: '8px 24px' }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          addItem(heroEvent);
+                        }}
+                      >
+                        <Ticket size={16} />
+                        <span>Comprar</span>
+                      </button>
+                    )}
                   </div>
 
                   {/* Progress bar */}

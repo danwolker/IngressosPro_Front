@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Calendar, MapPin, Clock, Ticket, Tag, ChevronLeft, ChevronRight } from 'lucide-react';
-import { fetchEvents, fetchSettings } from '../services/api';
+import { fetchEvents, fetchSettings, getSettingsCache } from '../services/api';
 import { useCart } from '../contexts/CartContext';
 import type { Event } from '../types';
 
@@ -271,7 +271,7 @@ function EventCard({ event, settings }: { event: Event; settings: any }) {
 export default function EventsSection() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
-  const [settings, setSettings] = useState<Record<string, string>>({});
+  const [settings, setSettings] = useState<Record<string, string>>(getSettingsCache() || {});
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { addItem } = useCart();
   const carouselRef = useRef<HTMLDivElement>(null);

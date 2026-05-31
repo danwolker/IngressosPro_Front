@@ -1,11 +1,11 @@
 import { Ticket, Instagram, Twitter, Youtube, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { fetchSettings, subscribeNewsletter } from '../services/api';
+import { subscribeNewsletter, fetchSettings, getSettingsCache } from '../services/api';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
   const year = new Date().getFullYear();
-  const [settings, setSettings] = useState<Record<string, string>>({});
+  const [settings, setSettings] = useState<Record<string, string>>(getSettingsCache() || {});
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);

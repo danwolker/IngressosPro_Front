@@ -1,9 +1,9 @@
 import { Search, CreditCard, Mail } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
-import { fetchSettings } from '../services/api';
+import { fetchSettings, getSettingsCache } from '../services/api';
 
 export default function HowItWorks() {
-  const [settings, setSettings] = useState<Record<string, string>>({});
+  const [settings, setSettings] = useState<Record<string, string>>(getSettingsCache() || {});
 
   useEffect(() => {
     async function loadSettings() {

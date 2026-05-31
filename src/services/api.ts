@@ -33,14 +33,31 @@ export async function fetchFeaturedEvents(): Promise<Event[]> {
   return json.data;
 }
 
+let settingsCache: Record<string, string> | null = null;
+let settingsPromise: Promise<Record<string, string>> | null = null;
+
+export function getSettingsCache(): Record<string, string> | null {
+  return settingsCache;
+}
+
 /**
  * Busca as configurações globais do site
  */
 export async function fetchSettings(): Promise<Record<string, string>> {
-  const res = await fetch(`${API_BASE}/settings`);
-  if (!res.ok) throw new Error('Falha ao carregar configurações');
-  const json = await res.json();
-  return json.data || {};
+  if (settingsCache) return settingsCache;
+  if (settingsPromise) return settingsPromise;
+
+  settingsPromise = fetch(`${API_BASE}/settings`).then(async (res) => {
+    if (!res.ok) throw new Error('Falha ao carregar configurações');
+    const json = await res.json();
+    settingsCache = json.data || {};
+    return settingsCache;
+  }).catch((err) => {
+    settingsPromise = null;
+    throw err;
+  });
+
+  return settingsPromise;
 }
 /**
  * Inscreve um e-mail na newsletter/leads

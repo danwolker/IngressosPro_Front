@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchSettings } from '../services/api';
 
-export default function ThemeInjector() {
+export default function ThemeInjector({ onLoaded }: { onLoaded?: () => void }) {
   const [themeStyles, setThemeStyles] = useState<string>('');
 
   useEffect(() => {
@@ -44,6 +44,8 @@ export default function ThemeInjector() {
         setThemeStyles(css);
       } catch (err) {
         console.error('Failed to load theme settings:', err);
+      } finally {
+        if (onLoaded) onLoaded();
       }
     }
     loadTheme();
